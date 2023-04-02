@@ -7,6 +7,7 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Submit from './pages/Submit';
 import Admin from './pages/Admin';
+import Submissions from './pages/Submissions';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/submit" element={<Submit />} />
+          <Route path="/submissions" element={<Submissions />} />
           <Route path="/admin" element={<Admin />} /> // Fix the redirections when there is no user or admin
         </Routes>
       </Router>

@@ -1,11 +1,11 @@
-import { addDoc, collection,deleteDoc, doc,getDocs, orderBy, query, queryEqual, setDoc, where, getDoc } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc, doc,getDocs, updateDoc, orderBy, query, queryEqual, setDoc, where, getDoc, arrayUnion } from 'firebase/firestore';
 import { db } from './firebase';
 import { format } from 'date-fns';
 
 
-export const addUser = async(uid, email, points) => { // When adding a security list to firebase make sure you cant add user with admin tags
+export const addUser = async(uid, email) => { // When adding a security list to firebase make sure you cant add user with admin tags
     try{
-        await setDoc(doc(db, 'users', uid), {uid,email,points});
+        await setDoc(doc(db, 'users', uid), {uid,email,points:0, accepted:[],rejected:[], pendingFix:[], pendingReview:[]});
     } catch(e) {
         console.log(e);
     }
@@ -23,13 +23,20 @@ export const isAdmin = async(uid) => {
     }
 }
 
-export const addSubmission = (uid, courseName, title ,bucket) => {
+export const addSubmission = async(uid, courseName, title ,bucket) => {
     const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
-    addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,date:formattedDate});
+    try {
+        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,date:formattedDate, status:'review'});
+        await updateDoc(doc(db, 'users', uid), {
+            pendingReview: arrayUnion(response.id)
+         });
+    } catch(e) {
+        console.log(e);
+    }
 };
 
 export const removeSubmission = async(docId) => {
-    await deleteDoc(doc(db, 'submissions', docId));
+    deleteDoc(doc(db, 'submissions', docId)).catch(e=>console.log(e));
 }
 
 export const listSubmissions = async() => { // Security note, make sure only admin can get the list of submissions
@@ -87,11 +94,10 @@ export const moveToPendingFix = (uid,courseName,title,bucket,message) => { // Mo
 
 export const moveToPendingReview = (uid,courseName,title,bucket,message) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
     const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
-    addDoc(collection(db, 'pendingReview'), {uid, courseName, date:formattedDate, title, bucket, message});
+    addDoc(collection(db, 'submissions'), {uid, courseName, date:formattedDate, title, bucket, message});
 }
 
 export const moveToCompleteRejection = (uid,courseName,title,message) => {
     const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
     addDoc(collection(db, 'rejectedSubmissions'), {uid, courseName, date:formattedDate, title, message});
 }
-// Was thinking about hwo to delete with teh deletiong. Make one function or multiple?

@@ -11,6 +11,7 @@ const Navigation = () => {
         <ul className='w-2/5  flex justify-evenly items-center text-lg'>
             {userAdmin  &&  <li className='border-b-2 border-transparent cursor-pointer hover:border-blue-500'><Link to='/admin'>Admin</Link></li>}
             <li className='border-b-2 border-transparent cursor-pointer hover:border-blue-500'><Link to='/submit'>Submit</Link></li>
+            <li className='border-b-2 border-transparent cursor-pointer hover:border-blue-500'><Link to='/submissions'>Submissions</Link></li>
             <li className='border-b-2 border-transparent cursor-pointer hover:border-blue-500'>Help</li>
             <li>
                 <button onClick={signOut}>

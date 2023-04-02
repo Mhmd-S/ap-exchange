@@ -58,7 +58,7 @@ export default function useFirebaseAuth() {
             
             await sendEmailVerification(currentUser.user);
 
-            await addUser(currentUser.user.uid, false, email, 0);
+            await addUser(currentUser.user.uid, email);
 
             signOut();
             setLoginErrors('Please check your email for the verification link.');

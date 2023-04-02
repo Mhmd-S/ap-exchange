@@ -89,17 +89,18 @@ const Review = ({submission, setViewingInfo}) => {
   },[])
 
   return (
-    <div className='w-full h-full rounded-md mx-auto  p-4 flex justify-between items-center'>
+    <div className='w-full h-screen rounded-md mx-auto  px-4 flex justify-between items-center'>
         <div className='w-[40%] h-full px-2'>
           
-          <header className='w-full h-1/5 border-b-2'>
+          <header className='w-full h-2/7 border-b-2 py-4'>
             <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(null)}/>
             <p className='mt-2'>Course Name: {submission.courseName}</p>
             <p>Assignment Title: {submission.title}</p>
             <p>User UID: {submission.uid}</p>
+            {submission.message && <p>Previous Message: {submission.message}</p>}
           </header>
           
-          <div className='w-full h-4/5 flex flex-col'>
+          <div className='w-full h-5/7 flex flex-col'>
 
             {/* Slider button start */}
             <div className='w-1/2 h-[10%] flex justify-between items-center my-4 self-center text-center'>
@@ -151,8 +152,9 @@ const Review = ({submission, setViewingInfo}) => {
           </div>
         </div>
         {/* The PDF viewer start*/}
-        <div className='w-[60%] h-[100%] overflow-y-scroll border-2 border-black p-1'>
+        <div className='w-[60%] h-full border-2'>
           <Document
+          className='h-full overflow-y-scroll'
             file={docArrayBuffer}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
               {Array.from(new Array(numPages), (_, index) => ( // CLean this
