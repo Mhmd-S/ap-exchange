@@ -25,25 +25,29 @@ const Admin = () => {
     }
 
     useEffect(()=>{
-        console.log(authUser)
-        console.log(userAdmin)
         if(!authUser){
             navigate('/');
-            console.log('1')
         } else {
             if (!userAdmin) {
-                navigate('/dashboard')   ;
-                console.log('2')
+                navigate('/dashboard');
             }
+        }
+         
+    },[authUser, userAdmin])
+
+      useEffect(()=>{
+        if(!authUser || !userAdmin){
+            navigate('/');
+        }else {
             listSubmissions().then((submissions)=>{
                 const listJSX = submissions.docs.map(submission => {
                     return <li key={submission.id} onClick={()=>onViewSub(submission.id)} className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>{submission.id}</li>;
                 });
                 setListJSX(listJSX);
-            });
-            setListLoading(false);
-        }  
-      },[authUser, userAdmin])
+                setListLoading(false); 
+            }
+        )}
+      });
 
     return (
         <div>

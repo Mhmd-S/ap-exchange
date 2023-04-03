@@ -11,7 +11,8 @@ const Dashboard = () => {
 
   useEffect(()=>{
     if(!authUser && !isLoading){
-      navigate('/')
+      console.log(authUser)
+      navigate('/');
     }
   }, [authUser, isLoading])
 

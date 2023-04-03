@@ -13,14 +13,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthUserProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/submit" element={<Submit />} />
-          <Route path="/submissions" element={<Submissions />} />
-          <Route path="/admin" element={<Admin />} /> // Fix the redirections when there is no user or admin
-        </Routes>
-      </Router>
+       <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/submit" element={<Submit />} />
+        <Route path="/submissions" element={<Submissions />} />
+        <Route path="/admin" element={<Admin />} />
+       </Routes>   
+     </Router>
     </AuthUserProvider>
   </React.StrictMode>
 );

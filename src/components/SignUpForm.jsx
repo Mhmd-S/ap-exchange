@@ -31,7 +31,7 @@ const SignUpForm = ({ setSignUpShow}) => { // Fix the errors so they are seperat
 
   return (
     <div className='absolute w-full h-full flex justify-center items-center bg-[#ffffffa8]'>
-        {showSuccess ? <Success setSignUpShow={setSignUpShow} setWindowShow={setShowSuccess} /> :
+        {showSuccess ? <Success setSignUpShow={setSignUpShow} setShowSuccess={setShowSuccess} /> :
         <form onSubmit={handleSubmit(submitSignUp)} className="w-1/3 h-3/5 mx-auto flex flex-col justify-between border-2 bg-[#ffffff] rounded-md p-4 relative shadow-md">
          
           <div className='w-full h-1/5 flex justify-between  items-center border-b-2 border-black'>

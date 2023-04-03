@@ -18,6 +18,7 @@ const Home = () => {
   const [resetShow, setResetShow] = useState(false); 
 
   useEffect(()=>{
+    console.log(isLoading)
     if (authUser && !isLoading) {
       if(userAdmin) {
         navigate('/admin');

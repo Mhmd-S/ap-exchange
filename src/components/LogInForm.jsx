@@ -26,7 +26,7 @@ const LogInForm = ({ setSignUpShow, setResetShow}) => {
   return ( // Should we change it to just one form??? but think about scalability
     <div className='relative w-[45%] h-full flex justify-center items-center'>    
         <form onSubmit={handleSubmit(onSubmit)} className="w-2/3 h-1/2 flex flex-col justify-between shadow-md border-2 bg-[#ffffff] rounded-md p-4 relative">
-            <div ref={refErrors} className='py-px text-lg text-red-500'></div>
+            <div ref={refErrors} className='py-px text-md font-bold text-red-500'></div>
             <label className='hidden'>Email:</label>
             <input 
             placeholder='Email' 

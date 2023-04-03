@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import jsPDF from 'jspdf';
 
-import { addVerifeidFile, getFile, deleteFromStorage, moveToPendingFixStorage } from '../firebase/storage';
-import { addVerified, moveToCompleteRejection, moveToPendingFix, removePending, removeSubmission } from '../firebase/firestore';
+import { addVerifeidFile, getFile, deleteFromStorage } from '../firebase/storage';
+import { acceptSubmission, changeToCompleteRejection, changeToPendingFix } from '../firebase/firestore';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -43,15 +43,13 @@ const Review = ({submission, setViewingInfo}) => {
   }
 
   const handleCompleteRejectiong = () =>{
-    moveToCompleteRejection(submission.uid,submission.courseName,submission.title,input);
-    removeSubmission(submission.submissionID);
+    changeToCompleteRejection(submission.submissionID,input);
     deleteFromStorage(submission.bucket);
   }
 
-  const handlePendingFix = async() =>{
-    const bucket = await moveToPendingFixStorage(submission.bucket);
-    moveToPendingFix(submission.uid,submission.courseName,submission.title,bucket,input);
-    
+  const handlePendingFix = () =>{
+    deleteFromStorage(submission.bucket);
+    changeToPendingFix(submission.submissionID,input);
   }
 
   const onSubmitValid = async() => {
@@ -71,12 +69,11 @@ const Review = ({submission, setViewingInfo}) => {
       // Uploads the preview file to the preview folder in the storage.
       const previewBucket = await addVerifeidFile(docPreview.output('arraybuffer'), input, false);
       // Adds the data related to the confirmed submission to the firestore.
-      addVerified(input,submission.title,completedBucket,previewBucket);
+      await acceptSubmission(submission.submissionID,input,submission.title,completedBucket,previewBucket);
+      deleteFromStorage(submission.bucket);
     } catch(e) {
       console.log(e);
     }
-    deleteFromStorage(submission.bucket);
-    removeSubmission(submission.submissionID);
   }
 
   // Gets the document's URL from the storage and URL in the state.

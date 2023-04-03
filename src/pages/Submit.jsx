@@ -30,7 +30,6 @@ const SubmitPage = () => {
   }
 
   useEffect(()=>{
-    console.log(authUser)
     if(!authUser){
       navigate('/');
     }
@@ -38,9 +37,11 @@ const SubmitPage = () => {
   },[authUser])
 
   return (
+    <>
+    {isLoading ? <Spinner/> : 
     <div>
       <Navigation/>
-      {isLoading ? <Spinner/> : 
+      
         <div className='w-full grid grid-cols-2 px-4 py-16 gap-10'> 
           <form onSubmit={handleSubmit(onSubmitData)}
                 className='border-[#4f5e79] border-t-2 p-2 flex flex-col relative after:content-["Submit"] after:w-[1/5] after:absolute after:block after:-top-11 after:-left-1 after:bg-[#4f5e79] after:p-2 after:text-white after:text-xl'>
@@ -78,8 +79,10 @@ const SubmitPage = () => {
             </ul>
           </div>
         </div>
-        }
+
       </div>
+    }
+    </>
   )
 }
 
