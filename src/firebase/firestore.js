@@ -1,6 +1,6 @@
-import { addDoc, collection,deleteDoc ,doc,getDocs, updateDoc, orderBy, query, queryEqual, setDoc, where, getDoc, arrayUnion, deleteField } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc , Timestamp,doc,getDocs, updateDoc, orderBy, limit,query, queryEqual, setDoc, where, getDoc, arrayUnion, deleteField } from 'firebase/firestore';
 import { db } from './firebase';
-import { format } from 'date-fns';
+
 
 
 export const addUser = async(uid, email) => { // When adding a security list to firebase make sure you cant add user with admin tags
@@ -24,9 +24,9 @@ export const isAdmin = async(uid) => {
 }
 
 export const addSubmission = async(uid, courseName, title ,bucket) => {
-    const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
+    const dateNow = Timestamp.now();
     try {
-        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,dateSubmitted:formattedDate, status:'review'});
+        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,dateSubmitted:dateNow, status:'review'});
         await updateDoc(doc(db, 'users', uid), {
             submissions: arrayUnion(response.id)
          });
@@ -34,10 +34,11 @@ export const addSubmission = async(uid, courseName, title ,bucket) => {
         console.log(e);
     }
 };
-
-export const listSubmissions = async() => { // Security note, make sure only admin can get the list of submissions
+// 
+export const listSubmissions = async(limitList) => { // Security note, make sure only admin can get the list of submissions
     try {
-        const collectionRef = query(collection(db, "submissions"), where("status", "==", "review"));
+        const limitQuery = limitList === undefined ? 50 : limitList;
+        const collectionRef = query(collection(db, "submissions"), where("status", "==", "review"), orderBy("dateSubmitted"), limit(limitQuery));
         const submissions =  await getDocs(collectionRef);
         return submissions;
     }catch(e) {
@@ -68,7 +69,7 @@ export const getUserSubmissionRef = async(uid) => {
 }
 
 export const acceptSubmission = async(docID ,courseName, title, completeBucket, previewBucket) => {
-    const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
+    const dateNow = Timestamp.now();
     try{
         await updateDoc(doc(db,'submissions',docID), {
             status: 'accepted', 
@@ -76,7 +77,7 @@ export const acceptSubmission = async(docID ,courseName, title, completeBucket, 
             bucket:deleteField(),
             completeBucket:completeBucket, 
             previewBucket:previewBucket, 
-            acceptedAt:formattedDate
+            acceptedAt:dateNow
             }
         );
         
@@ -95,16 +96,16 @@ export const acceptSubmission = async(docID ,courseName, title, completeBucket, 
 }
 
 export const changeToPendingFix = async(uid,messageFix) => { // Moves the submission from the submission firestore to the pendingFix firestore.
-    const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
+    const dateNow = Timestamp.now();
     await updateDoc(doc(db,'submissions',uid), {status: 'fix', message: messageFix, bucket:'none'});
 }
 
 export const changeToPendingReview = async(uid) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
-    const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
-    updateDoc(doc(db, 'submissions', uid), {status: 'review'});
+    const dateNow = Timestamp.now();
+    updateDoc(doc(db, 'submissions', uid), {status: 'review', dateFixSubmitted:dateNow});
 } // USer will use this, update the paramets with what user will update.
 
 export const changeToCompleteRejection = (uid, messageReject) => {
-    const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
+    const dateNow = Timestamp.now();
     updateDoc(doc(db, 'submissions', uid), {status: 'rejected', bucket:'none',message:messageReject});
 }

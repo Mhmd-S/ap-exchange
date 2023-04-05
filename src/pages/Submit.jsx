@@ -7,16 +7,18 @@ import { addSubmission } from '../firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import Spinner from '../components/Spinner';
+import Success from '../components/Success';
 import Navigation from '../components/Navigation';
 
 const SubmitPage = () => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true); 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const { authUser } = useAuth();
   
   const [ isSubmitting, setIsSubmitting] = useState(false);
+  const [ displaySuccess, setDisplaySuccess ] = useState(false);
 
   const onSubmitData = (data) => {
     setIsSubmitting(true);
@@ -25,6 +27,8 @@ const SubmitPage = () => {
         .catch((e)=>{
           console.log(e);
         });
+        setDisplaySuccess(true);
+        reset();
     }).catch((e)=>{console.log(e)});
     setIsSubmitting(false);
   }
@@ -39,7 +43,7 @@ const SubmitPage = () => {
 
   return (
     <>
-    {isLoading ? <Spinner/> : 
+    {isLoading || isSubmitting ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} message='Success'/> : 
     <div>
       <Navigation/>
       

@@ -18,7 +18,6 @@ const Submissions = () => {
             navigate('/');
             return;
         }
-
           
         getUserSubmissionRef(authUser.uid).then((userSubRef) => { // This monster, jesus
           Promise.all(

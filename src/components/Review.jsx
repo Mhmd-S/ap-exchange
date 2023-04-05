@@ -5,6 +5,8 @@ import jsPDF from 'jspdf';
 
 import { addVerifeidFile, getFile, deleteFromStorage } from '../firebase/storage';
 import { acceptSubmission, changeToCompleteRejection, changeToPendingFix } from '../firebase/firestore';
+import Success from './Success';
+import Spinner from './Spinner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -16,6 +18,7 @@ const Review = ({submission, setViewingInfo}) => {
   const [ acceptMode, setAcceptMode ] = useState(true); // Describes if the user is going to reject or accept the submission
   
   const [ input, SetInput ] = useState('');
+  const [ inputErrors, setInputErrors ] = useState('');
 
   const [ displaySuccess, setDisplaySuccess ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(true);
@@ -53,6 +56,15 @@ const Review = ({submission, setViewingInfo}) => {
   }
 
   const onSubmitValidAssignmnet = async() => {
+
+    if (input === '') {
+      setInputErrors('Course Name can not be empty');
+      return;
+    } else if ( Object.keys(pageList).length === 0) {
+      setInputErrors('No Pages are selected as previews');
+      return;
+    }
+
     const docPreview = new jsPDF();
     // This block of code gets the selected pages from the pdf and creates a new pdf with the selected.
     Object.keys(pageList).map(page =>{
@@ -65,7 +77,7 @@ const Review = ({submission, setViewingInfo}) => {
     // Uploads the preview pdf file to the storage.
     try {
       // Uploads the completed file to the completed folder storage in the storage.
-      console.log(input)
+      setIsLoading(true);
       const completedBucket = await addVerifeidFile(docArrayBuffer, input, true);
       // Uploads the preview file to the preview folder in the storage.
       const docPrevArrayBuffer = docPreview.output('arraybuffer')
@@ -73,6 +85,8 @@ const Review = ({submission, setViewingInfo}) => {
       // Adds the data related to the confirmed submission to the firestore.
       await acceptSubmission(submission.submissionID,input,submission.title,completedBucket,previewBucket);
       deleteFromStorage(submission.bucket);
+      setIsLoading(false);
+      setDisplaySuccess(true);
     } catch(e) {
       console.log(e);
     }
@@ -85,14 +99,17 @@ const Review = ({submission, setViewingInfo}) => {
       .then(response => response.arrayBuffer())
       .then(pdfBlob => setDocArrayBuffer(pdfBlob))
       .catch(error => console.log("Could not get file"));
+      setIsLoading(false);
   },[])
 
   return (
+    <>
+    {isLoading ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} parentCompShow={setViewingInfo} message='Success'/> : 
     <div className='w-full h-screen rounded-md mx-auto  px-4 flex justify-between items-center'>
         <div className='w-[40%] h-full px-2'>
           
           <header className='w-full h-2/7 border-b-2 py-4'>
-            <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(null)}/>
+            <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(false)}/>
             <p className='mt-2'>Course Name: {submission.courseName}</p>
             <p>Assignment Title: {submission.title}</p>
             <p>User UID: {submission.uid}</p>
@@ -100,6 +117,7 @@ const Review = ({submission, setViewingInfo}) => {
           </header>
           
           <div className='w-full h-5/7 flex flex-col'>
+            
 
             {/* Slider button start */}
             <div className='w-1/2 h-[10%] flex justify-between items-center my-4 self-center text-center'>
@@ -116,6 +134,8 @@ const Review = ({submission, setViewingInfo}) => {
             </div>
             {/* Slider button end */}
             
+            {acceptMode && <h5 className='w-full font-bold text-center text-red-500 '>{inputErrors}</h5>}
+
             {acceptMode && <p>Pages to be used as previews: {Object.keys(pageList).map(page=>{return page+" "})}</p>}
 
             <label className='mt-4'>{acceptMode ? "Course Name" : " Message"}:</label>
@@ -168,8 +188,9 @@ const Review = ({submission, setViewingInfo}) => {
               ))}
           </Document>
         </div>
-        {/* The PDF viewer start*/}
-    </div>
+     </div>
+    }
+  </>
   )
 }
 
