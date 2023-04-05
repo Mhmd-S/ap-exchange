@@ -10,7 +10,7 @@ import Spinner from './Spinner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const Review = ({submission, setViewingInfo}) => {
+const Review = ({submission, nextSubmissionJSX, setDisplaySuccess}) => {
 
   const [ numPages, setNumPages ] = useState(null); // Number of total pages
   const [ docArrayBuffer , setDocArrayBuffer ] = useState(null); // Complete pdf doc array buffer
@@ -20,7 +20,7 @@ const Review = ({submission, setViewingInfo}) => {
   const [ input, SetInput ] = useState('');
   const [ inputErrors, setInputErrors ] = useState('');
 
-  const [ displaySuccess, setDisplaySuccess ] = useState(false);
+  
   const [ isLoading, setIsLoading ] = useState(true);
 
   const handlePageClick = (pageNum, canvas) => { // Handles the action of clicking a page on the pdf viewer.
@@ -48,11 +48,13 @@ const Review = ({submission, setViewingInfo}) => {
   const handleCompleteRejectiong = () =>{
     changeToCompleteRejection(submission.submissionID,input);
     deleteFromStorage(submission.bucket);
+    nextSubmissionJSX();
   }
 
   const handlePendingFix = () =>{
     deleteFromStorage(submission.bucket);
     changeToPendingFix(submission.submissionID,input);
+    nextSubmissionJSX();
   }
 
   const onSubmitValidAssignmnet = async() => {
@@ -87,6 +89,7 @@ const Review = ({submission, setViewingInfo}) => {
       deleteFromStorage(submission.bucket);
       setIsLoading(false);
       setDisplaySuccess(true);
+      nextSubmissionJSX();
     } catch(e) {
       console.log(e);
     }
@@ -94,6 +97,7 @@ const Review = ({submission, setViewingInfo}) => {
 
   // Gets the document's URL from the storage and URL in the state.
   useEffect(()=>{
+    console.log(submission.bucket)
     getFile(submission.bucket)
       .then(downloadURL => fetch(downloadURL))
       .then(response => response.arrayBuffer())
@@ -104,12 +108,12 @@ const Review = ({submission, setViewingInfo}) => {
 
   return (
     <>
-    {isLoading ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} parentCompShow={setViewingInfo} message='Success'/> : 
-    <div className='w-full h-screen rounded-md mx-auto  px-4 flex justify-between items-center'>
+    {isLoading ? <Spinner/> : 
+    <div className='w-full h-max-full rounded-md mx-auto  px-4 flex justify-between items-center'>
         <div className='w-[40%] h-full px-2'>
           
           <header className='w-full h-2/7 border-b-2 py-4'>
-            <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(false)}/>
+            {/* <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(false)}/> */}
             <p className='mt-2'>Course Name: {submission.courseName}</p>
             <p>Assignment Title: {submission.title}</p>
             <p>User UID: {submission.uid}</p>
@@ -171,7 +175,7 @@ const Review = ({submission, setViewingInfo}) => {
           </div>
         </div>
         {/* The PDF viewer start*/}
-        <div className='w-[60%] h-full border-2'>
+        <div className='w-[60%] h-max-full border-2'>
           <Document
           className='h-full overflow-y-scroll'
             file={docArrayBuffer}

@@ -14,16 +14,18 @@ const Admin = () => {
     const { authUser, isLoading, userAdmin} = useAuth();
 
     const [ listLoading, setListLoading ] = useState(true);
-
+    const [ displaySuccess, setDisplaySuccess ] = useState(false);
     const [ listJSX, setListJSX ] = useState([]);
-    const [ viewingInfo, setViewingInfo ] = useState(false);
 
     const getListOfSubmissionsJSX = async() => {
-        const listElements =  listSubmissions(5).then((submissions)=>{
-            return submissions.docs.map(submission => {
-                return <li key={submission.id} onClick={()=>onViewSub(submission.id)} className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>{submission.id}</li>;
+        const listElements = listSubmissions(5).then((submissions)=>{
+            return submissions.docs.map(submission=> {
+                const submissionID = submission.id;
+                const data = submission.data();
+                return <Review key={submission.id} submission={{...data, submissionID}} setDisplaySuccess={setDisplaySuccess} nextSubmissionJSX={nextSubmissionJSX}/>
             })
-        });
+        }).catch(e=> console.log(e));
+        setListLoading(false);
         return listElements;
     }
 
@@ -33,10 +35,18 @@ const Admin = () => {
                 .then(setListLoading(false));
     }
 
-    const onViewSub = async(submissionID) => {
-        const data = await getSubmission(submissionID);
-        setViewingInfo(<Review submission={{...data, submissionID}} setViewingInfo={setViewingInfo} />)
+    const nextSubmissionJSX = () => {
+        const copyList = listJSX.slice(1,);
+        if( copyList[0]===undefined){
+            refreshList();
+        }else {        
+            setListJSX(copyList);
+       }
     }
+    // const onViewSub = async(submissionID) => {
+    //     const data = await getSubmission(submissionID);
+    //     setViewingInfo(<Review submission={{...data, submissionID}} setViewingInfo={setViewingInfo} />)
+    // }
 
     useEffect(()=>{
         if(!authUser){
@@ -59,11 +69,11 @@ const Admin = () => {
 
     return (
         <div> 
-            { viewingInfo ? viewingInfo : listLoading ? <Spinner/> :
+            {listLoading ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} message='Success'/> : 
             <>
                 <Navigation/>
-                    <div className='w-full grid grid-cols-2 justify-evenly align-center gap-8'>
-                        {listJSX}
+                    <div className='w-full flex flex-col justify-evenly align-center'>
+                        {listJSX[0] == undefined ? <h4>Feels empty here</h4> : listJSX[0]}
                     </div>
             </> 
             }

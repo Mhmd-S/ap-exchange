@@ -23,7 +23,7 @@ const Submissions = () => {
           Promise.all(
             userSubRef.map(async(ref) => {
               return getSubmission(ref).then((data) => {
-                return { id: ref.id, data: data };
+                return { id: ref, data: data };
               });
             })
           ).then((finalList) => {
@@ -32,11 +32,12 @@ const Submissions = () => {
               return null;
             }
             const elements = finalList.map((item) => {
-              return <SubmissionItem key={item.uid} data={item.data} />;
+              return <SubmissionItem key={item.id} data={item.data} />;
             });
             setEleList(elements);
           });
         });
+        
       }, [authUser]);
 
   return (
