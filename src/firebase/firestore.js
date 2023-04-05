@@ -1,4 +1,4 @@
-import { addDoc, collection,deleteDoc, doc,getDocs, updateDoc, orderBy, query, queryEqual, setDoc, where, getDoc, arrayUnion } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc ,doc,getDocs, updateDoc, orderBy, query, queryEqual, setDoc, where, getDoc, arrayUnion, deleteField } from 'firebase/firestore';
 import { db } from './firebase';
 import { format } from 'date-fns';
 
@@ -26,7 +26,7 @@ export const isAdmin = async(uid) => {
 export const addSubmission = async(uid, courseName, title ,bucket) => {
     const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
     try {
-        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,date:formattedDate, status:'review'});
+        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,dateSubmitted:formattedDate, status:'review'});
         await updateDoc(doc(db, 'users', uid), {
             submissions: arrayUnion(response.id)
          });
@@ -70,9 +70,25 @@ export const getUserSubmissionRef = async(uid) => {
 export const acceptSubmission = async(docID ,courseName, title, completeBucket, previewBucket) => {
     const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'2'");
     try{
-        // Adds a document retaining information to the complete submissions.
-        const response = await addDoc(collection(db, 'courses',courseName,'assignments'),{ title, completeBucket, previewBucket,date:formattedDate});
-        await updateDoc(doc(db,'submissions',docID), {status: 'accepted', message:'',bucket:'', completedDocRef: response.id});
+        await updateDoc(doc(db,'submissions',docID), {
+            status: 'accepted', 
+            message:deleteField(),
+            bucket:deleteField(),
+            completeBucket:completeBucket, 
+            previewBucket:previewBucket, 
+            acceptedAt:formattedDate
+            }
+        );
+        
+        const docRef = doc(db, 'courses', courseName);
+        const docSnap = await getDoc(docRef);
+
+        if(!docSnap.exists()){
+            await setDoc(docRef, {assigments:[{docID}]});
+        }else {
+            await updateDoc(docRef,{ assigments: arrayUnion({docID})});
+        }
+        
     } catch(e){
         console.log(e);
     }

@@ -6,5 +6,27 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true,
+    "firestore": {
+      "port": 8080
+    },
+    "storage": {
+      "port": 9199
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

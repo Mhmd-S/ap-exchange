@@ -19,9 +19,10 @@ const Submissions = () => {
             return;
         }
 
-        getUserSubmissionRef(authUser.uid).then((userSubRef) => {
+          
+        getUserSubmissionRef(authUser.uid).then((userSubRef) => { // This monster, jesus
           Promise.all(
-            userSubRef.map((ref) => {
+            userSubRef.map(async(ref) => {
               return getSubmission(ref).then((data) => {
                 return { id: ref.id, data: data };
               });

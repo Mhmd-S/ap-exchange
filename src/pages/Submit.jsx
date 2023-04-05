@@ -30,6 +30,7 @@ const SubmitPage = () => {
   }
 
   useEffect(()=>{
+    console.log(1);
     if(!authUser){
       navigate('/');
     }

@@ -18,12 +18,6 @@ const Admin = () => {
     const [ listJSX, setListJSX ] = useState([]);
     const [ viewingInfo, setViewingInfo ] = useState(null);
 
-
-    const onViewSub = async(submissionID) => {
-        const data = await getSubmission(submissionID);
-        setViewingInfo(<Review submission={{...data, submissionID}} setViewingInfo={setViewingInfo} />)
-    }
-
     useEffect(()=>{
         if(!authUser){
             navigate('/');
@@ -35,19 +29,24 @@ const Admin = () => {
          
     },[authUser, userAdmin])
 
-      useEffect(()=>{
+    useEffect(()=>{
         if(!authUser || !userAdmin){
             navigate('/');
         }else {
             listSubmissions().then((submissions)=>{
-                const listJSX = submissions.docs.map(submission => {
+                const listEle = submissions.docs.map(submission => {
                     return <li key={submission.id} onClick={()=>onViewSub(submission.id)} className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>{submission.id}</li>;
                 });
-                setListJSX(listJSX);
+                setListJSX(listEle);
                 setListLoading(false); 
             }
         )}
-      });
+      },[]);
+
+    const onViewSub = async(submissionID) => {
+        const data = await getSubmission(submissionID);
+        setViewingInfo(<Review submission={{...data, submissionID}} setViewingInfo={setViewingInfo} />)
+    }
 
     return (
         <div>
@@ -60,21 +59,6 @@ const Admin = () => {
                             <ul className='h-full w-full flex flex-col border-4 shadow-md rounded-md p-4'> {/* list here the submissions*/}
                                 {listJSX ? listJSX : <p>Feels Empty</p>} 
                             </ul>
-                        </div>
-                        <div>
-                            <h3>New Fixes</h3>
-
-                            <ul className='h-full flex mx-auto flex-col border-4 shadow-md rounded-md p-4'> {/* list here the submissions*/}
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                                <li className='cursor-pointer p-2 hover:bg-sky-500/[.06]'>lorem</li>                    
-                            </ul>
-
                         </div>
                     </div>
             </> 

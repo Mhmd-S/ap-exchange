@@ -52,7 +52,7 @@ const Review = ({submission, setViewingInfo}) => {
     changeToPendingFix(submission.submissionID,input);
   }
 
-  const onSubmitValid = async() => {
+  const onSubmitValidAssignmnet = async() => {
     const docPreview = new jsPDF();
     // This block of code gets the selected pages from the pdf and creates a new pdf with the selected.
     Object.keys(pageList).map(page =>{
@@ -65,9 +65,11 @@ const Review = ({submission, setViewingInfo}) => {
     // Uploads the preview pdf file to the storage.
     try {
       // Uploads the completed file to the completed folder storage in the storage.
+      console.log(input)
       const completedBucket = await addVerifeidFile(docArrayBuffer, input, true);
       // Uploads the preview file to the preview folder in the storage.
-      const previewBucket = await addVerifeidFile(docPreview.output('arraybuffer'), input, false);
+      const docPrevArrayBuffer = docPreview.output('arraybuffer')
+      const previewBucket = await addVerifeidFile(docPrevArrayBuffer, input, false);
       // Adds the data related to the confirmed submission to the firestore.
       await acceptSubmission(submission.submissionID,input,submission.title,completedBucket,previewBucket);
       deleteFromStorage(submission.bucket);
@@ -121,10 +123,10 @@ const Review = ({submission, setViewingInfo}) => {
             {/* Inputs Start */}
             {/* If the user chooses to reject the submission a 'message' input will appear instead of the 'course name' input */}
             { acceptMode ?
-                <input
-                  defaultValue={submission.courseName}
+                <input 
                   onChange={(e)=>SetInput(e.target.value)} 
                   type='text'
+                  value={input}
                   className='mb-2 border-2 shadow-inner rounded-md text-lg p-2 focus:border-[#159aec] outline-none' 
                   />
             :
@@ -138,7 +140,7 @@ const Review = ({submission, setViewingInfo}) => {
 
             {/* Buttons start */}
             { acceptMode ? 
-                  <button type='submit' onClick={onSubmitValid} className='w-[30%] text-center text-white font-medium h-fit p-2 bg-lime-600 hover:bg-lime-700 self-center rounded-md'>Accept Submission</button>
+                  <button type='submit' onClick={onSubmitValidAssignmnet} className='w-[30%] text-center text-white font-medium h-fit p-2 bg-lime-600 hover:bg-lime-700 self-center rounded-md'>Accept Submission</button>
                 :
                 <div className='w-full flex justify-between items-center mt-4 px-8'>
                   <button type='submit' onClick={handleCompleteRejectiong} className='w-[30%] text-center text-white font-medium h-fit p-2 bg-red-600 hover:bg-red-700 self-center rounded-md'>Reject Completely</button>
