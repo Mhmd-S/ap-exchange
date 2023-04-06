@@ -26,7 +26,14 @@ export const isAdmin = async(uid) => {
 export const addSubmission = async(uid, courseName, title ,bucket) => {
     const dateNow = Timestamp.now();
     try {
-        const response = await addDoc(collection(db, 'submissions'), {uid, courseName, title, bucket,dateSubmitted:dateNow, status:'review'});
+        const response = await addDoc(collection(db, 'submissions'), {
+            uid, 
+            courseName, 
+            title, 
+            bucket,
+            dateSubmitted:dateNow, 
+            status:'review'
+        });
         await updateDoc(doc(db, 'users', uid), {
             submissions: arrayUnion(response.id)
          });
@@ -100,9 +107,9 @@ export const changeToPendingFix = async(uid,messageFix) => { // Moves the submis
     await updateDoc(doc(db,'submissions',uid), {status: 'fix', message: messageFix, bucket:'none'});
 }
 
-export const changeToPendingReview = async(uid) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
+export const changeToPendingReview = async(uid, courseName, title,bucket) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
     const dateNow = Timestamp.now();
-    updateDoc(doc(db, 'submissions', uid), {status: 'review', dateFixSubmitted:dateNow});
+    updateDoc(doc(db, 'submissions', uid), {status: 'review', courseName:courseName, title:title,dateFixSubmitted:dateNow, bucket:bucket});
 } // USer will use this, update the paramets with what user will update.
 
 export const changeToCompleteRejection = (uid, messageReject) => {

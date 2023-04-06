@@ -10,7 +10,7 @@ import Spinner from './Spinner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const Review = ({submission, nextSubmissionJSX, setDisplaySuccess}) => {
+const Review = ({submission, nextSubmissionJSX}) => {
 
   const [ numPages, setNumPages ] = useState(null); // Number of total pages
   const [ docArrayBuffer , setDocArrayBuffer ] = useState(null); // Complete pdf doc array buffer
@@ -88,7 +88,6 @@ const Review = ({submission, nextSubmissionJSX, setDisplaySuccess}) => {
       await acceptSubmission(submission.submissionID,input,submission.title,completedBucket,previewBucket);
       deleteFromStorage(submission.bucket);
       setIsLoading(false);
-      setDisplaySuccess(true);
       nextSubmissionJSX();
     } catch(e) {
       console.log(e);
@@ -175,9 +174,9 @@ const Review = ({submission, nextSubmissionJSX, setDisplaySuccess}) => {
           </div>
         </div>
         {/* The PDF viewer start*/}
-        <div className='w-[60%] h-max-full border-2'>
+        <div className='w-[60%] border-2'>
           <Document
-          className='h-full overflow-y-scroll'
+          className='h-[100vh] overflow-y-scroll'
             file={docArrayBuffer}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
               {Array.from(new Array(numPages), (_, index) => ( // CLean this

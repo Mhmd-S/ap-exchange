@@ -14,7 +14,6 @@ const Admin = () => {
     const { authUser, isLoading, userAdmin} = useAuth();
 
     const [ listLoading, setListLoading ] = useState(true);
-    const [ displaySuccess, setDisplaySuccess ] = useState(false);
     const [ listJSX, setListJSX ] = useState([]);
 
     const getListOfSubmissionsJSX = async() => {
@@ -22,7 +21,7 @@ const Admin = () => {
             return submissions.docs.map(submission=> {
                 const submissionID = submission.id;
                 const data = submission.data();
-                return <Review key={submission.id} submission={{...data, submissionID}} setDisplaySuccess={setDisplaySuccess} nextSubmissionJSX={nextSubmissionJSX}/>
+                return <Review key={submission.id} submission={{...data, submissionID}} nextSubmissionJSX={nextSubmissionJSX}/>
             })
         }).catch(e=> console.log(e));
         setListLoading(false);
@@ -69,11 +68,11 @@ const Admin = () => {
 
     return (
         <div> 
-            {listLoading ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} message='Success'/> : 
+            {listLoading ? <Spinner/> :
             <>
                 <Navigation/>
-                    <div className='w-full flex flex-col justify-evenly align-center'>
-                        {listJSX[0] == undefined ? <h4>Feels empty here</h4> : listJSX[0]}
+                    <div className='w-full h-max-screen flex justify-evenly align-center'>
+                        {listJSX[0] == undefined ? <div className='w-full h-full flex flex-col justify-center items-center'><img className='w-1/4' src='/emptyAdmin.svg' alt="Empty"/><h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1></div> : listJSX[0]}
                     </div>
             </> 
             }

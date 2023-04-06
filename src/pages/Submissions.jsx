@@ -6,11 +6,18 @@ import { getSubmission, getUserSubmissionRef } from '../firebase/firestore';
 import { useAuth } from '../firebase/auth';
 import SubmissionItem from '../components/SubmissionItem';
 import { useNavigate } from 'react-router-dom';
+import SubmissionUserView from '../components/SubmissionUserView';
 
 const Submissions = () => {
     const navigate = useNavigate();
+
     const { authUser, isLoading } = useAuth();
     const [eleList, setEleList ] = useState([]);
+    const [submissionShow, setSubmissionShow] = useState(null);
+
+    const handleOnClick = (submissionInfo) => {
+      setSubmissionShow(<SubmissionUserView submissionInfo={submissionInfo} setSubmissionShow={setSubmissionShow}/>);
+    }
 
     useEffect(() => {
 
@@ -23,16 +30,20 @@ const Submissions = () => {
           Promise.all(
             userSubRef.map(async(ref) => {
               return getSubmission(ref).then((data) => {
-                return { id: ref, data: data };
+                return { id: ref, ...data };
               });
             })
           ).then((finalList) => {
-            console.log(finalList)
             if (finalList[0] == undefined) {
               return null;
             }
-            const elements = finalList.map((item) => {
-              return <SubmissionItem key={item.id} data={item.data} />;
+            const elements = finalList.reverse().map(item => {
+              if (item.status === 'fix' || item.status === 'rejected'){
+                return <SubmissionItem handleOnClick={handleOnClick}  key={item.id} submissionInfo={item} />;
+              } else {
+                return <SubmissionItem key={item.id} submissionInfo={item} />;
+              }
+            
             });
             setEleList(elements);
           });
@@ -41,11 +52,24 @@ const Submissions = () => {
       }, [authUser]);
 
   return (
-    <div className='w-full'>
+    <div className='w-full f-min-full'>
         <Navigation/>
-        <ul className='w-full flex flex-col justify-center items-center py-6'>
-          {eleList[0] ? eleList : <div className='w-full h-full flex flex-col justify-center items-center'><img className='w-1/4' src='/emptyLogo.svg' alt="Empty"/><h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1></div>}
-        </ul>
+        {
+        submissionShow ? 
+          submissionShow 
+        :
+          (
+            eleList[0] ? 
+              <ul className='w-full f-full grid auto-rows-[35%] grid-cols-1 justify-center justify-items-center py-6'>
+                {eleList} 
+              </ul> 
+            : 
+              <div className='w-full h-full flex flex-col justify-center items-center'>
+                <img className='w-1/4' src='/emptyLogo.svg' alt="Empty"/>
+                <h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1>
+              </div>
+          )
+        }
     </div>
   )
 }
