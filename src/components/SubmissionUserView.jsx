@@ -29,7 +29,7 @@ const SubmissionUserView = ({ submissionInfo, setSubmissionShow }) => {
 
     return (
     <>
-        {displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} message='Success'/> :
+        {displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} parentCompShow={setSubmissionShow} message='Success'/> :
         <div className='w-full flex justify-evenly'>
             <div className='w-2/5 border-[#4f5e79] border-t-2 p-2 mt-20 ml-20 flex flex-col break-words relative after:content-["Fix\a0Tab"] after:w-[1/5] after:absolute after:block after:-top-11 after:left-0 after:bg-[#4f5e79] after:p-2 after:text-white after:text-xl'>
                 <p className='break-words border-b-2 py-4'>Course Name: {submissionInfo.courseName}</p>

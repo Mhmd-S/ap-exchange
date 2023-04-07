@@ -116,3 +116,25 @@ export const changeToCompleteRejection = (uid, messageReject) => {
     const dateNow = Timestamp.now();
     updateDoc(doc(db, 'submissions', uid), {status: 'rejected', bucket:'none',message:messageReject});
 }
+
+
+export const getCourses = async() => {
+    try {
+        const collectionRef = query(collection(db, "courses"));
+        const courses =  await getDocs(collectionRef);
+        console.log(courses)
+        return courses;
+    }catch(e) {
+        console.log(e)
+    }
+}
+
+export const getCourseDocs = async(courseName) => { // Continue this. Add another 'where' also chance the course to conaint one document with all the the coursesName. cheaper.
+    try {
+        const collectionRef = query(collection(db, "submissions"), where("courseName", "==", courseName),where("status", "==", "accepted"), orderBy("dateSubmitted"));
+        const submissions =  await getDocs(collectionRef);
+        return submissions;
+    }catch(e) {
+        console.log(e)
+    }
+}

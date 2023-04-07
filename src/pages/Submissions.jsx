@@ -13,7 +13,9 @@ const Submissions = () => {
 
     const { authUser, isLoading } = useAuth();
     const [eleList, setEleList ] = useState([]);
-    const [submissionShow, setSubmissionShow] = useState(null);
+
+    // Default is false, If it contains object related to the submission data it will display it.
+    const [submissionShow, setSubmissionShow] = useState(false);
 
     const handleOnClick = (submissionInfo) => {
       setSubmissionShow(<SubmissionUserView submissionInfo={submissionInfo} setSubmissionShow={setSubmissionShow}/>);
@@ -52,7 +54,7 @@ const Submissions = () => {
       }, [authUser]);
 
   return (
-    <div className='w-full f-min-full'>
+    <div className='w-full'>
         <Navigation/>
         {
         submissionShow ? 

@@ -54,13 +54,13 @@ const SubmitPage = () => {
             {errors.courseName && <div className='self-center text-sm text-red-500'>{errors.courseName?.message}</div>}
             <div className='w-full pl-10 py-4 border-b-2 grid grid-cols-[30%_70%]'>
               <label>Course Name:</label>
-              <input {...register("courseName", { required:"Course name is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-blue-500'/>
+              <input {...register("courseName", { required:"Course name is required", maxLength:{value:45, message:"Max length is 45 characters" }})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-blue-500'/>
               
             </div>
             {errors.projectTitle && <div className='self-center pt-2 text-sm text-red-500'>{errors.projectTitle?.message}</div>}
             <div className='w-full pl-10 py-4 border-b-2 grid grid-cols-[30%_70%]'>
               <label>Project Title:</label>
-              <input {...register("projectTitle", { required:"Project title is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-blue-500'/>
+              <input {...register("projectTitle", { required:"Project title is required", maxLength:{value:45, message:"Max length is 45 characters" }} )} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-blue-500'/>
               
             </div>
             {errors.projectTitle && <div className='self-center pt-2 text-sm text-red-500'>{errors.projectTitle?.message}</div>}
