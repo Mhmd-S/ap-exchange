@@ -67,11 +67,11 @@ const Admin = () => {
       },[]);
 
     return (
-        <div> 
+        <div className='w-full h-screen'> 
             {listLoading ? <Spinner/> :
             <>
                 <Navigation/>
-                    <div className='w-full h-max-screen flex justify-evenly align-center'>
+                    <div className='w-full h-full flex justify-evenly align-center'>
                         {listJSX[0] == undefined ? <div className='w-full h-full flex flex-col justify-center items-center'><img className='w-1/4' src='/emptyAdmin.svg' alt="Empty"/><h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1></div> : listJSX[0]}
                     </div>
             </> 

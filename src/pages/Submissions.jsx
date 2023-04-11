@@ -54,7 +54,7 @@ const Submissions = () => {
       }, [authUser]);
 
   return (
-    <div className='w-full'>
+    <div className='w-full h-screen'>
         <Navigation/>
         {
         submissionShow ? 
@@ -62,11 +62,11 @@ const Submissions = () => {
         :
           (
             eleList[0] ? 
-              <ul className='w-full f-full grid auto-rows-[35%] grid-cols-1 justify-center justify-items-center py-6'>
+              <ul className='w-full h-5/6 grid auto-rows-[35%] grid-cols-1 justify-center justify-items-center py-6'>
                 {eleList} 
               </ul> 
             : 
-              <div className='w-full h-full flex flex-col justify-center items-center'>
+              <div className='w-full h-5/6 flex flex-col justify-center items-center'>
                 <img className='w-1/4' src='/emptyLogo.svg' alt="Empty"/>
                 <h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1>
               </div>

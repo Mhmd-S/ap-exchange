@@ -17,11 +17,11 @@ const Dashboard = () => {
   }, [authUser, isLoading])
 
   return ( 
-    <div>
+    <div className='w-full h-screen'>
     {isLoading ? <Spinner/>
     : <>
         <Navigation/>
-        <div>Dashboard</div>
+        <div className='w-full h-5/6'>Dashboard</div>
       </>
     }
     </div>

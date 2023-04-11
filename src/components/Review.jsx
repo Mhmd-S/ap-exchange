@@ -72,9 +72,7 @@ const Review = ({submission, nextSubmissionJSX}) => {
     Object.keys(pageList).map(page =>{
       docPreview.insertPage(page);
       docPreview.addImage(pageList[page], -12.5,0);
-      if(page === Object.keys(pageList)[-1]){
-        docPreview.deletePage(page);
-      }
+
     })
     // Uploads the preview pdf file to the storage.
     try {
@@ -108,20 +106,20 @@ const Review = ({submission, nextSubmissionJSX}) => {
   return (
     <>
     {isLoading ? <Spinner/> : 
-    <div className='w-full h-max-full rounded-md mx-auto  px-4 flex justify-between items-center'>
+    <div className='w-full h-screen rounded-md mx-auto  px-4 flex justify-between items-center'>
         <div className='w-[40%] h-full px-2'>
           
-          <header className='w-full h-2/7 border-b-2 py-4'>
+          <div className='w-full h-2/6 border-b-2 py-4'>
             {/* <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(false)}/> */}
-            <p className='mt-2'>Course Name: {submission.courseName}</p>
-            <p>Assignment Title: {submission.title}</p>
-            <p>User UID: {submission.uid}</p>
+            <p className='mt-2'><span className='font-bold'>Course Name:</span> {submission.courseName}</p>
+            <p><span className='font-bold'>Assignment Title:</span> {submission.title}</p>
+            <p><span className='font-bold'>Academic Year:</span> {submission.academicYear}</p>
+            {/* <p><span className='font-bold'>User UID:</span> {submission.uid}</p> */}
+            <p className='break-words'><span className='font-bold'>Description:</span> {submission.description}</p>
             {submission.message && <p>Previous Message: {submission.message}</p>}
-          </header>
+          </div>
           
-          <div className='w-full h-5/7 flex flex-col'>
-            
-
+          <div className='w-full h-4/6 flex flex-col'>
             {/* Slider button start */}
             <div className='w-1/2 h-[10%] flex justify-between items-center my-4 self-center text-center'>
               

@@ -1,4 +1,4 @@
-import { addDoc, collection,deleteDoc , Timestamp,doc,getDocs, updateDoc, orderBy, limit,query, queryEqual, setDoc, where, getDoc, arrayUnion, deleteField } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc , Timestamp,doc,getDocs, updateDoc, orderBy, limit,query, queryEqual, setDoc, where, getDoc, arrayUnion, deleteField, startAfter } from 'firebase/firestore';
 import { db } from './firebase';
 
 
@@ -23,13 +23,15 @@ export const isAdmin = async(uid) => {
     }
 }
 
-export const addSubmission = async(uid, courseName, title ,bucket) => {
+export const addSubmission = async(uid, courseName, title, description, academicYear ,bucket) => {
     const dateNow = Timestamp.now();
     try {
         const response = await addDoc(collection(db, 'submissions'), {
             uid, 
             courseName, 
-            title, 
+            title,
+            description,
+            academicYear, 
             bucket,
             dateSubmitted:dateNow, 
             status:'review'
@@ -107,9 +109,9 @@ export const changeToPendingFix = async(uid,messageFix) => { // Moves the submis
     await updateDoc(doc(db,'submissions',uid), {status: 'fix', message: messageFix, bucket:'none'});
 }
 
-export const changeToPendingReview = async(uid, courseName, title,bucket) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
+export const changeToPendingReview = async(uid, courseName, title,bucket, description, academicYear) => { // Moves the submission from the pending fix firestore to the pendingF review firestore.
     const dateNow = Timestamp.now();
-    updateDoc(doc(db, 'submissions', uid), {status: 'review', courseName:courseName, title:title,dateFixSubmitted:dateNow, bucket:bucket});
+    updateDoc(doc(db, 'submissions', uid), {status: 'review', description, academicYear,courseName, title,dateFixSubmitted:dateNow, bucket:bucket});
 } // USer will use this, update the paramets with what user will update.
 
 export const changeToCompleteRejection = (uid, messageReject) => {
@@ -129,12 +131,36 @@ export const getCourses = async() => {
     }
 }
 
-export const getCourseDocs = async(courseName) => { // Continue this. Add another 'where' also chance the course to conaint one document with all the the coursesName. cheaper.
+export const getCourseDocs = async(courseName, lastRequested) => { // Continue this. Add another 'where' also chance the course to conaint one document with all the the coursesName. cheaper.
     try {
-        const collectionRef = query(collection(db, "submissions"), where("courseName", "==", courseName),where("status", "==", "accepted"), orderBy("dateSubmitted"));
+        let collectionRef;
+        if(lastRequested === undefined){
+            collectionRef = query(collection(db, "submissions"), where("courseName", "==", courseName),where("status", "==", "accepted"), orderBy("dateSubmitted"), limit(9)); 
+        }else {
+            collectionRef = query(collection(db, "submissions"), where("courseName", "==", courseName),where("status", "==", "accepted"), orderBy("dateSubmitted"), limit(9), startAfter(lastRequested.docs[lastRequested.docs.length - 1]));
+        }
         const submissions =  await getDocs(collectionRef);
         return submissions;
     }catch(e) {
         console.log(e)
+    }
+}
+
+
+export const addPointsToUser = async(uid, prevPoints) => {
+    try{
+        const docRef = doc(db, 'users', uid);
+        await docRef.updateDoc({ points: prevPoints + 10 });
+    }catch(e) {
+        console.log(e);
+    }
+}
+
+export const deductPointsFromUser = async(uid, prevPoints) => {
+    try{
+        const docRef = doc(db, 'users', uid);
+        await docRef.updateDoc({ points: prevPoints - 10})
+    } catch(e) {
+        console.log(e);
     }
 }
