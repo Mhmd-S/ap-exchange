@@ -14,27 +14,30 @@ const SubmitPage = () => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true); 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const { authUser } = useAuth();
   
   const [ isSubmitting, setIsSubmitting] = useState(false);
   const [ displaySuccess, setDisplaySuccess ] = useState(false);
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { authUser } = useAuth();
 
   const onSubmitData = (data) => {
     setIsSubmitting(true);
     uploadFile(data.fileInput[0], authUser.uid).then((bucket)=>{
       addSubmission(authUser.uid, data.courseName, data.projectTitle, data.description, data.academicYear,bucket)
+        .then(()=>{
+          setDisplaySuccess(true);
+          reset();
+        })
         .catch((e)=>{
           console.log(e);
         });
-        setDisplaySuccess(true);
-        reset();
+        
     }).catch((e)=>{console.log(e)});
     setIsSubmitting(false);
   }
 
   useEffect(()=>{
-    console.log(1);
     if(!authUser){
       navigate('/');
     }

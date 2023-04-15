@@ -47,9 +47,9 @@ export default function useFirebaseAuth() {
 
         setAuthUser({
             uid: user.uid,
-            email: user.email,
-            points: user.points            
-        })
+            email: user.email,          
+        });
+        
         setSignUpErrors(null);
         setLoginErrors(null);
         setResetErrors(null);

@@ -6,8 +6,13 @@ import Navigation from '../components/Navigation'
 import ExchangeDisplayAssignment from '../components/ExchangeDisplayAssignment'
 import MiniPDFViewer from '../components/MiniPDFViewer'
 import Spinner from '../components/Spinner'
+import { useAuth } from '../firebase/auth'
+import { useNavigate } from 'react-router-dom'
+
 
 const Exchange = () => {
+    const navigate = useNavigate();
+    const { authUser } = useAuth();
 
     const [ courseChosen, setCourseChosen ] = useState(null); // Course choosen by user
     const [ courseItemsJSX, setCourseItemsJSX ] = useState([]);  // JSX elements of the assigments
@@ -19,18 +24,26 @@ const Exchange = () => {
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(()=>{
+        if (!authUser) {
+            navigate('/');
+            return;
+          }
+    }, [authUser])
+
+    useEffect(()=>{
+    
         if(!courseChosen){
             setIsLoading(false);
             return;
         }
 
         (async () => { // iife so we could use the await in the useEffect();
-            await getAsignments();
+            getAsignments();
           })();
 
-    },[courseChosen])
+    },[courseChosen]) // Seperate this
 
-    const getAsignments = async(lastRequested) => {
+    const getAsignments = (lastRequested) => {
         setIsLoading(true);
         getCourseDocs(courseChosen, lastRequested) // Requests a new batch of assigments from firestore.
             .then((submissions)=>{
@@ -44,10 +57,11 @@ const Exchange = () => {
 
                 const list = submissions.docs.map(submission => { // This soup parses through the response brought from firestore and creates a list of JSX elements with the information. 
                     const assignmentInfo = submission.data();
-                    return <li className='w-full h-full grid grid-rows-[85%_15%] grid-cols-1 border-2 rounded-md hover:border-sky-500' key={submission.id}>
+                    const submissionID = submission.id;
+                    return (<li className='w-full h-full grid grid-rows-[85%_15%] grid-cols-1 border-2 rounded-md hover:border-sky-500' key={submissionID}>
                                 <MiniPDFViewer handleAssignmentClick={handleAssignmentClick} assignmentInfo={assignmentInfo}/>
-                                <p className='w-full flex justify-center items-center font-semibold text-ellipsis cursor-pointer' onClick={()=>handleAssignmentClick(assignmentInfo)}>{assignmentInfo.title}</p>
-                            </li>
+                                <p className='w-full flex justify-center items-center font-semibold text-ellipsis cursor-pointer' onClick={()=>{handleAssignmentClick(assignmentInfo, submissionID)}}>{assignmentInfo.title}</p>
+                            </li>)
                 })
 
                 setCourseItemsJSX([...courseItemsJSX, ...list]);
@@ -75,8 +89,8 @@ const Exchange = () => {
         }
     }
 
-    const handleAssignmentClick = (assignmentInfo) => {
-        setAssignmentChosen(<ExchangeDisplayAssignment setAssignmentChosen={setAssignmentChosen} assignmentInfo={assignmentInfo}/>)
+    const handleAssignmentClick = (assignmentInfo, submissionID) => {
+        setAssignmentChosen(<ExchangeDisplayAssignment userID={authUser.uid} setAssignmentChosen={setAssignmentChosen} assignmentInfo={assignmentInfo} submissionID={submissionID} displayButton={true}/>)
     }
 
   return (
@@ -92,7 +106,7 @@ const Exchange = () => {
                 {courseChosen && <h4 className='w-full p-6 text-4xl flex justify-between items-center'>
                     {courseChosen}
                     <div className=' w-1/6 flex pr-10 justify-between'>
-                        <img src='./left.svg' alt='Back' onClick={handlePrevious} dis className='w-[2.5rem] cursor-pointer'/>
+                        <img src='./left.svg' alt='Back' onClick={handlePrevious} className='w-[2.5rem] cursor-pointer'/>
                         <img src='./right.svg' alt='Right' onClick={handleNext} className='w-[2.5rem] cursor-pointer'/>
                     </div>
                     </h4>}

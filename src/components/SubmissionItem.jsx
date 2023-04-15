@@ -21,7 +21,7 @@ const SubmissionItem = ({ submissionInfo, handleOnClick }) => {
                 <h6 className='truncate'>Course Name: {submissionInfo.courseName}</h6>
                 <p>Date: {submissionInfo.dateSubmitted.toDate().toDateString()}</p>
                 <p>Status: {displayLogoStatus(submissionInfo.status)[1]}</p>
-                <p>{submissionInfo.status in ['rejected', 'warning'] && 'Click to learn more.'}</p>
+                <p>{(submissionInfo.status === "rejected" || submissionInfo.status === "fix")  && 'Click to learn more.'}</p>
         </div>
     </li>
   )

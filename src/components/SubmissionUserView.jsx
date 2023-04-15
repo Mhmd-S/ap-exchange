@@ -31,7 +31,7 @@ const SubmissionUserView = ({ submissionInfo, setSubmissionShow }) => {
     <>
         {displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} parentCompShow={setSubmissionShow} message='Success'/> :
         <div className='w-full flex justify-evenly'>
-            <div className='w-2/5 border-[#4f5e79] border-t-2 p-2 mt-20 ml-20 flex flex-col break-words relative after:content-["Fix\a0Tab"] after:w-[1/5] after:absolute after:block after:-top-11 after:left-0 after:bg-[#4f5e79] after:p-2 after:text-white after:text-xl'>
+            <div className='w-2/5 border-[#4f5e79] border-t-2 p-2 mt-20 ml-20 flex flex-col break-words relative after:content-["Details"] after:w-[1/5] after:absolute after:block after:-top-11 after:left-0 after:bg-[#4f5e79] after:p-2 after:text-white after:text-xl'>
                 <p className='break-words border-b-2 py-4'>Course Name: {submissionInfo.courseName}</p>
                 <p className='break-words border-b-2 py-4'>Project Title: {submissionInfo.title}</p>
                 <p className='border-b-2 py-4'>Status: {submissionInfo.status}</p>
@@ -45,13 +45,13 @@ const SubmissionUserView = ({ submissionInfo, setSubmissionShow }) => {
             {errors.courseName && <div className='self-center text-sm text-red-500'>{errors.courseName?.message}</div>}
             <div className='w-full pl-10 py-4 border-b-2 grid grid-cols-[25%_75%]'>
               <label>Course Name:</label>
-              <input {...register("courseName", { required:"Course name is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-green-500'/>
+              <input defaultValue={submissionInfo.courseName} {...register("courseName", { required:"Course name is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-green-500'/>
               
             </div>
             {errors.projectTitle && <div className='self-center pt-2 text-sm text-red-500'>{errors.projectTitle?.message}</div>}
             <div className='w-full pl-10 py-4 border-b-2 grid grid-cols-[25%_75%]'>
               <label>Project Title:</label>
-              <input {...register("projectTitle", { required:"Project title is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-green-500'/>
+              <input defaultValue={submissionInfo.title} {...register("projectTitle", { required:"Project title is required"})} type='text' className='outline-none border-b-2 border-transparent focus:border-b-2 focus:border-green-500'/>
               
             </div>
             {errors.projectTitle && <div className='self-center pt-2 text-sm text-red-500'>{errors.projectTitle?.message}</div>}

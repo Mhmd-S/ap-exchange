@@ -65,7 +65,7 @@ const MiniPDFViewer = ({ assignmentInfo, handleAssignmentClick }) => {
             loading={<Spinner/>}
             scale={0.3}
             error={'Failed To Display Preview'}
-            className="mx-auto cursor-pointer"
+            className="w-full aspect-auto flex justify-center cursor-pointer"
           />
           <button
             disabled={currentPage === numPages}

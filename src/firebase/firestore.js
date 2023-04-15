@@ -5,7 +5,12 @@ import { db } from './firebase';
 
 export const addUser = async(uid, email) => { // When adding a security list to firebase make sure you cant add user with admin tags
     try{
-        await setDoc(doc(db, 'users', uid), {uid,email,points:0, submissions:[]});
+        await setDoc(doc(db, 'users', uid), {uid, 
+                                            email, 
+                                            points:0, 
+                                            submissions:[], 
+                                            ownedDocs: []
+                                        });
     } catch(e) {
         console.log(e);
     }
@@ -146,6 +151,17 @@ export const getCourseDocs = async(courseName, lastRequested) => { // Continue t
     }
 }
 
+export const getUserPoints = async(uid) => {
+    try{
+        const docRef = doc(db, 'users', uid);
+        const docSnap = await getDoc(docRef);
+        const data = docSnap.data();
+        const points = data.points;
+        return points;
+    } catch(e) {
+        console.log(e);
+    }
+}
 
 export const addPointsToUser = async(uid, prevPoints) => {
     try{
@@ -159,8 +175,33 @@ export const addPointsToUser = async(uid, prevPoints) => {
 export const deductPointsFromUser = async(uid, prevPoints) => {
     try{
         const docRef = doc(db, 'users', uid);
-        await docRef.updateDoc({ points: prevPoints - 10})
+        const points = prevPoints - 10;
+        console.log(points);
+        console.log(prevPoints);
+        await updateDoc(docRef, { points: points})
     } catch(e) {
+        console.log(e);
+    }
+}
+
+export const addDocToUserOwned = async(userID, submissionID) => {
+    try {
+        const docRef = doc(db, 'users', userID);
+        console.log(submissionID)
+        await updateDoc(docRef,{ ownedDocs: arrayUnion(submissionID) })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export const getUserOwnedDocs = async(userID) => {
+    try {
+        const docRef = doc(db, 'users', userID);
+        const response = await getDoc(docRef);
+        const ownedDocs = response.data().ownedDocs;
+        console.log(ownedDocs)
+        return ownedDocs;
+    } catch (e) {
         console.log(e);
     }
 }

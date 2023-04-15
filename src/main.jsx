@@ -9,6 +9,7 @@ import Submit from './pages/Submit';
 import Admin from './pages/Admin';
 import Submissions from './pages/Submissions';
 import Exchange from './pages/Exchange';
+import Help from './pages/Help';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/submissions" element={<Submissions />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/exchange" element={<Exchange />} />
+        <Route path="/help" element={<Help />} />
        </Routes>   
      </Router>
     </AuthUserProvider>
