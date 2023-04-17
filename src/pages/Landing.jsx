@@ -13,22 +13,18 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const navigate = useNavigate();
 
-  const {authUser, isLoading, userAdmin} = useAuth();
+  const {authUser, isLoading} = useAuth();
   const [signUpShow, setSignUpShow] = useState(false); 
   const [resetShow, setResetShow] = useState(false); 
 
   useEffect(()=>{
     if (authUser && !isLoading) {
-      if(userAdmin) {
-        navigate('/admin');
-      } else {
       navigate("/dashboard");
-      }
     }
-  }, [authUser, isLoading, userAdmin])
+  }, [authUser, isLoading])
 
   return (
-    <div className='w-full flex flex-col items-center justify-evenly bg-[#f0f2f5] relative'>
+    <div className='w-full h-11/12flex flex-col items-center justify-evenly bg-[#f0f2f5] relative'>
       {isLoading ? <Spinner/>:
       <div className='w-full'>
         <div className='w-full h-screen flex flex-row text-center'>
@@ -39,9 +35,6 @@ const Home = () => {
             <LogInForm signUpShow={signUpShow} setSignUpShow={setSignUpShow} setResetShow={setResetShow} />
             {signUpShow && <SignUpForm setSignUpShow={setSignUpShow} />}
             {resetShow && <ForgotPassword setResetShow={setResetShow} />}
-        </div>
-        <div>
-          <p>InfoInfo</p>
         </div>
       </div>
       }

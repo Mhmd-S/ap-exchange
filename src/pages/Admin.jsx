@@ -11,7 +11,7 @@ const Admin = () => {
 
     const navigate = useNavigate();
 
-    const { authUser, isLoading, userAdmin} = useAuth();
+    const { authUser, isLoading, userAdmin, signOut} = useAuth();
 
     const [ listLoading, setListLoading ] = useState(true);
     const [ listJSX, setListJSX ] = useState([]);
@@ -67,10 +67,10 @@ const Admin = () => {
       },[]);
 
     return (
-        <div className='w-full h-screen'> 
+        <div className='w-full h-11/12'> 
             {listLoading ? <Spinner/> :
             <>
-                <Navigation/>
+                <Navigation userAdmin={userAdmin} signOut={signOut} authUser={authUser}/>
                     <div className='w-full h-full flex justify-evenly align-center'>
                         {listJSX[0] == undefined ? <div className='w-full h-full flex flex-col justify-center items-center'><img className='w-1/4' src='/emptyAdmin.svg' alt="Empty"/><h1 className='font-bold text-4xl text-[#d6d6d6ff]'>No Results Found</h1></div> : listJSX[0]}
                     </div>

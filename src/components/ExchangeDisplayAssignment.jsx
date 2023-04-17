@@ -5,7 +5,7 @@ import Spinner from './Spinner';
 import Success from './Success';
 import { addDocToUserOwned, deductPointsFromUser, getUserOwnedDocs, getUserPoints } from '../firebase/firestore';
 
-const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID, displayButton }) => {
+const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID, displayButton, submissionID, bucket }) => {
 
   const [ displayErrorsMessage, setdisplayErrorsMessage ] = useState(null);
   const [numPages, setNumPages] = useState(null); // Number of total pages
@@ -14,7 +14,7 @@ const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID
   const [docArrayBuffer, setDocArrayBuffer] = useState(null); // Complete pdf doc array buffer
 
   useEffect(() => {
-    getFile(assignmentInfo.previewBucket)
+    getFile(bucket)
       .then(downloadURL => fetch(downloadURL))
       .then(response => response.arrayBuffer())
       .then(pdfBlob => setDocArrayBuffer(pdfBlob))
@@ -23,18 +23,25 @@ const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID
   }, []);
 
   const handleExchangeClick = async() => {
+    if(!displayButton){
+      return;
+    }
 
     try{
       setIsLoading(true);
-      const userPoints = await getUserPoints(userID);
       const userOwnedDocs = await getUserOwnedDocs(userID);
-      const userHaveDoc = userOwnedDocs.includes(assignmentInfo.submissionID);
+      const userHaveDoc = userOwnedDocs.includes(submissionID);
+
       if (userHaveDoc) {
-        setdisplayErrorsMessage('Document Already Owned. Check your dashboard.');
-      } else if (userPoints < 10) {
+        setdisplayErrorsMessage('Document Already Owned. Check your "Owned Assignments" tab.');
+        return;
+      };
+
+      const userPoints = await getUserPoints(userID);
+      if (userPoints < 10) {
         setdisplayErrorsMessage('Not Enough Points');
       } else {
-        await addDocToUserOwned(userID, assignmentInfo.submissionID);
+        await addDocToUserOwned(userID, submissionID);
         await deductPointsFromUser(userID, userPoints);
         setDisplaySuccess(true);
       }
@@ -45,7 +52,6 @@ const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID
     finally{
       setIsLoading(false);
     }
-  
   }
 
   return (
@@ -68,8 +74,8 @@ const ExchangeDisplayAssignment = ({ setAssignmentChosen, assignmentInfo, userID
           className='max-h-full  w-fit overflow-y-scroll p-4  border-4 first-letter:rounded-lg bg-[#e7e9ec]'
             file={docArrayBuffer}
             onLoadSuccess={({ numPages }) => setNumPages(numPages)}>
-              {Array.from(new Array(numPages), (_, index) => ( // CLean this
-                <Page /* In the future add a loading spinner */
+              {Array.from(new Array(numPages), (_, index) => (
+                <Page 
                   key={`page_${index + 1}`}
                   pageNumber={index + 1}
                   renderTextLayer={false}

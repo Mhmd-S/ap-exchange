@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Help = () => {
     const navigate = useNavigate();
-    const { isLoading, authUser } = useAuth();
+    const { isLoading, authUser, userAdmin, signOut } = useAuth();
     const [ showHelp, setShowHelp ] = useState(null);
 
     useEffect(()=>{
@@ -25,11 +25,11 @@ const Help = () => {
     <div className='w-full h-screen'>
         {isLoading ? <Spinner/>
         : <>
-            <Navigation/>
+            <Navigation userAdmin={userAdmin} signOut={signOut} authUser={authUser}/>
             <div className='relative w-full h-5/6 flex flex-col'>
                 <h1 className='w-full text-4xl font-extrabold pl-[15%] pt-8 pb-2 underline'>AP-Exchange</h1>
                 <h2 className='w-full text-3xl text-bold pl-[15%] pb-10'>F.A.Q</h2>
-                <div className='w-1/2 h-1/2 border-2 rounded-lg self-center p-4 '>
+                <div className='w-1/2 h-1/2 border-2 rounded-lg self-center py-2'>
                 { showHelp ?  
                     showHelp 
                     :

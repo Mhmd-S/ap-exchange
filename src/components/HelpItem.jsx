@@ -21,11 +21,11 @@ const HelpItem = ({helpIndex, setShowHelp}) => {
     }
   return (
     <div className='w-full h-full grid grid-rows-[20%_80%] justify-center items-center '>
-        <div className='w-full grid grid-cols-[5%_95%] text-xl border-b-2 pb-2'>
+        <div className='w-full h-full grid grid-cols-[5%_95%] text-xl border-b-2 justify-items-center items-center'>
             <span onClick={()=>setShowHelp(null)} className='cursor-pointer text-gray-300 '>{'<'}</span>
             <span className='text-center w-full'>{helpParagraphs[helpIndex].title}</span>
         </div>
-        <p className='p-4 text-center'>{helpParagraphs[helpIndex].paragraph}</p>
+        <p className='p-4 text-center w-full h-full'>{helpParagraphs[helpIndex].paragraph}</p>
     </div>
   )
 }

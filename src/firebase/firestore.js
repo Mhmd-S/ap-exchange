@@ -9,7 +9,8 @@ export const addUser = async(uid, email) => { // When adding a security list to 
                                             email, 
                                             points:0, 
                                             submissions:[], 
-                                            ownedDocs: []
+                                            ownedDocs: [],
+                                            isAdmin:false
                                         });
     } catch(e) {
         console.log(e);
@@ -21,7 +22,7 @@ export const isAdmin = async(uid) => {
         const docRef = doc(db, "users", uid); 
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();
-        const isVerified  = data.isAdmin;
+        const isVerified  = data.isAdmin; // This field for a normal user doesnt exist so it always throws a undefined error.
         return isVerified; 
     }catch(e) {
         console.log(e)

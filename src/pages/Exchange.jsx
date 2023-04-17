@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Exchange = () => {
     const navigate = useNavigate();
-    const { authUser } = useAuth();
+    const { authUser, userAdmin, signOut } = useAuth();
 
     const [ courseChosen, setCourseChosen ] = useState(null); // Course choosen by user
     const [ courseItemsJSX, setCourseItemsJSX ] = useState([]);  // JSX elements of the assigments
@@ -31,17 +31,13 @@ const Exchange = () => {
     }, [authUser])
 
     useEffect(()=>{
-    
         if(!courseChosen){
             setIsLoading(false);
             return;
         }
-
-        (async () => { // iife so we could use the await in the useEffect();
-            getAsignments();
-          })();
-
-    },[courseChosen]) // Seperate this
+        setAssignmentChosen(null);
+        getAsignments();
+    },[courseChosen])
 
     const getAsignments = (lastRequested) => {
         setIsLoading(true);
@@ -58,8 +54,9 @@ const Exchange = () => {
                 const list = submissions.docs.map(submission => { // This soup parses through the response brought from firestore and creates a list of JSX elements with the information. 
                     const assignmentInfo = submission.data();
                     const submissionID = submission.id;
-                    return (<li className='w-full h-full grid grid-rows-[85%_15%] grid-cols-1 border-2 rounded-md hover:border-sky-500' key={submissionID}>
-                                <MiniPDFViewer handleAssignmentClick={handleAssignmentClick} assignmentInfo={assignmentInfo}/>
+                    console.log(submissionID)
+                    return (<li className='w-full h-4/5 grid grid-rows-[85%_15%] grid-cols-1 border-2 rounded-md hover:border-sky-500' key={submissionID}>
+                                <MiniPDFViewer handleAssignmentClick={handleAssignmentClick} submissionID={submissionID} assignmentInfo={assignmentInfo}/>
                                 <p className='w-full flex justify-center items-center font-semibold text-ellipsis cursor-pointer' onClick={()=>{handleAssignmentClick(assignmentInfo, submissionID)}}>{assignmentInfo.title}</p>
                             </li>)
                 })
@@ -76,7 +73,7 @@ const Exchange = () => {
             if (endOfSubmissions) {
                 return;
             }
-            await getAsignments(lastRequestedList);
+            getAsignments(lastRequestedList);
         }
         setCurrentPage(currentPage+1);
     }
@@ -90,17 +87,17 @@ const Exchange = () => {
     }
 
     const handleAssignmentClick = (assignmentInfo, submissionID) => {
-        setAssignmentChosen(<ExchangeDisplayAssignment userID={authUser.uid} setAssignmentChosen={setAssignmentChosen} assignmentInfo={assignmentInfo} submissionID={submissionID} displayButton={true}/>)
+        setAssignmentChosen(<ExchangeDisplayAssignment userID={authUser.uid} setAssignmentChosen={setAssignmentChosen} assignmentInfo={assignmentInfo} submissionID={submissionID} displayButton={true} bucket={assignmentInfo.previewBucket}/>)
     }
 
   return (
     // Fetch the courses and display them, set a realtime search.
-    <div className='w-full h-screen'>
+    <div className='w-full h-screen overflow-hidden'>
     { isLoading ? <Spinner /> : 
     <>
-        <Navigation/>
-        <div className='relative w-full h-5/6 grid grid-cols-[20%_80%] grid-rows-1'>
-            <ExchangeMenu courseChosen={courseChosen} setCourseChosen={setCourseChosen} /> 
+        <Navigation userAdmin={userAdmin} signOut={signOut} authUser={authUser}/>
+        <div className='relative w-full h-full grid grid-cols-[20%_80%] grid-rows-1'>
+            <ExchangeMenu courseChosen={courseChosen} setCourseChosen={setCourseChosen} setCurrentPage={setCurrentPage} setCourseItemsJSX={setCourseItemsJSX}/> 
             <div className='w-full h-full relative'>
                 {assignmentChosen && assignmentChosen } 
                 {courseChosen && <h4 className='w-full p-6 text-4xl flex justify-between items-center'>

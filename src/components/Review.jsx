@@ -4,8 +4,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import jsPDF from 'jspdf';
 
 import { addVerifeidFile, getFile, deleteFromStorage } from '../firebase/storage';
-import { acceptSubmission, changeToCompleteRejection, changeToPendingFix } from '../firebase/firestore';
-import Success from './Success';
+import { acceptSubmission, addPointsToUser, changeToCompleteRejection, changeToPendingFix } from '../firebase/firestore';
 import Spinner from './Spinner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -77,13 +76,14 @@ const Review = ({submission, nextSubmissionJSX}) => {
     // Uploads the preview pdf file to the storage.
     try {
       // Uploads the completed file to the completed folder storage in the storage.
-      setIsLoading(true);
+      setIsLoading(true); 
       const completedBucket = await addVerifeidFile(docArrayBuffer, input, true);
       // Uploads the preview file to the preview folder in the storage.
       const docPrevArrayBuffer = docPreview.output('arraybuffer')
       const previewBucket = await addVerifeidFile(docPrevArrayBuffer, input, false);
       // Adds the data related to the confirmed submission to the firestore.
       await acceptSubmission(submission.submissionID,input,submission.title,completedBucket,previewBucket);
+      addPointsToUser(submission.uid);
       deleteFromStorage(submission.bucket);
       setIsLoading(false);
       nextSubmissionJSX();
@@ -110,11 +110,10 @@ const Review = ({submission, nextSubmissionJSX}) => {
         <div className='w-[40%] h-full px-2'>
           
           <div className='w-full h-2/6 border-b-2 py-4'>
-            {/* <img src='/back.svg' alt='Go Back' className='w-[2rem] aspect-square cursor-pointer' onClick={()=>setViewingInfo(false)}/> */}
             <p className='mt-2'><span className='font-bold'>Course Name:</span> {submission.courseName}</p>
             <p><span className='font-bold'>Assignment Title:</span> {submission.title}</p>
             <p><span className='font-bold'>Academic Year:</span> {submission.academicYear}</p>
-            {/* <p><span className='font-bold'>User UID:</span> {submission.uid}</p> */}
+            <p><span className='font-bold'>User UID:</span> {submission.uid}</p>
             <p className='break-words'><span className='font-bold'>Description:</span> {submission.description}</p>
             {submission.message && <p>Previous Message: {submission.message}</p>}
           </div>
@@ -142,7 +141,6 @@ const Review = ({submission, nextSubmissionJSX}) => {
             <label className='mt-4'>{acceptMode ? "Course Name" : " Message"}:</label>
 
             {/* Inputs Start */}
-            {/* If the user chooses to reject the submission a 'message' input will appear instead of the 'course name' input */}
             { acceptMode ?
                 <input 
                   onChange={(e)=>SetInput(e.target.value)} 

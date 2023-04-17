@@ -19,7 +19,7 @@ const SubmitPage = () => {
   const [ displaySuccess, setDisplaySuccess ] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const { authUser } = useAuth();
+  const { authUser, signOut, userAdmin } = useAuth();
 
   const onSubmitData = (data) => {
     setIsSubmitting(true);
@@ -48,7 +48,7 @@ const SubmitPage = () => {
     <>
     {isLoading || isSubmitting ? <Spinner/> : displaySuccess ? <Success setDisplaySuccess={setDisplaySuccess} message='Success'/> : 
     <div className='w-full h-screen'>
-      <Navigation/>
+      <Navigation userAdmin={userAdmin} signOut={signOut} authUser={authUser}/>
       
         <div className='w-full h-5/6 grid grid-cols-2 px-4 py-16 gap-10'> 
           <form onSubmit={handleSubmit(onSubmitData)}

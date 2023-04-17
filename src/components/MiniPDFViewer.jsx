@@ -3,7 +3,7 @@ import { Document, Page } from 'react-pdf';
 import { getFile } from '../firebase/storage';
 import Spinner from './Spinner';
 
-const MiniPDFViewer = ({ assignmentInfo, handleAssignmentClick }) => {
+const MiniPDFViewer = ({ assignmentInfo, submissionID,handleAssignmentClick }) => {
   const [numPages, setNumPages] = useState(null); // Number of total pages
   const [currentPage, setCurrentPage] = useState(1); // Current page number
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ const MiniPDFViewer = ({ assignmentInfo, handleAssignmentClick }) => {
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full aspect-square">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -58,7 +58,7 @@ const MiniPDFViewer = ({ assignmentInfo, handleAssignmentClick }) => {
             {'<'}
           </button>
           <Page
-            onClick={()=>handleAssignmentClick(assignmentInfo)}
+            onClick={()=>handleAssignmentClick(assignmentInfo, submissionID)}
             pageNumber={currentPage}
             renderTextLayer={false}
             renderAnnotationLayer={false}

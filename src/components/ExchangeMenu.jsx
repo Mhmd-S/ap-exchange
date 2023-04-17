@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getCourses } from '../firebase/firestore';
 import Spinner from './Spinner'
 
-const ExchangeMenu = ({ courseChosen ,setCourseChosen }) => {
+const ExchangeMenu = ({ courseChosen ,setCourseChosen, setCurrentPage, setCourseItemsJSX }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [coursesList, setCoursesList] = useState([]);
     const [searchInput, setSearchInput] = useState('');
@@ -26,6 +26,8 @@ const ExchangeMenu = ({ courseChosen ,setCourseChosen }) => {
             return;
         }
         setCourseChosen(courseID);
+        setCurrentPage(1);
+        setCourseItemsJSX([]);
     }
 
     const handleSearchChange = (e) => {

@@ -3,14 +3,137 @@
    id="emoji"
    viewBox="0 0 72 72"
    version="1.1"
-   sodipodi:docname="E31B.svg"
+   sodipodi:docname="logo.svg"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs29" />
+     id="defs29">
+    <marker
+       style="overflow:visible;"
+       id="marker33520"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path33518" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker33510"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path33508" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path31312" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path31309" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow2Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Lend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(1.1) rotate(180) translate(1,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;fill:context-stroke;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="path31330" />
+    </marker>
+    <marker
+       id="ExperimentalArrow"
+       refX="5.0"
+       refY="3.0"
+       orient="auto-start-reverse"
+       inkscape:stockid="ExperimentalArrow"
+       inkscape:isstock="true">
+      <path
+         style="fill:context-stroke"
+         d="m 10,3 -10,3 0,-6 z"
+         id="path31562" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutL"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutL"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8)"
+         style="fill-rule:evenodd;fill:context-stroke;stroke:context-stroke;stroke-width:1.0pt"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path31451" />
+    </marker>
+    <marker
+       id="ExperimentalArrow-8"
+       refX="5"
+       refY="3"
+       orient="auto-start-reverse"
+       inkscape:stockid="ExperimentalArrow"
+       inkscape:isstock="true">
+      <path
+         style="fill:context-stroke"
+         d="M 10,3 0,6 V 0 Z"
+         id="path31562-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker33520-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path33518-1" />
+    </marker>
+  </defs>
   <sodipodi:namedview
      id="namedview27"
      pagecolor="#ffffff"
@@ -21,8 +144,8 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="11.055556"
-     inkscape:cx="31.839196"
-     inkscape:cy="36"
+     inkscape:cx="35.185928"
+     inkscape:cy="29.306531"
      inkscape:window-width="1920"
      inkscape:window-height="1000"
      inkscape:window-x="-11"
@@ -30,55 +153,23 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="line" />
   <g
-     id="color">
-    <ellipse
-       cx="34.9608"
-       cy="25.7788"
-       rx="2.2509"
-       ry="1.3725"
-       fill="#fff"
-       id="ellipse2" />
-  </g>
-  <g
-     id="line">
-    <path
-       fill="none"
-       stroke="#000"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       stroke-width="2"
-       d="M34.344,58.0262a22.6773,22.6773,0,0,1-5.6481-44.1971"
-       id="path17"
-       style="stroke-width:4.1;stroke-miterlimit:4;stroke-dasharray:none" />
-    <path
-       d="M29.0563,17.4945l4.6293-4.14a.51.51,0,0,0-.1806-.8647l-5.8993-1.94a.51.51,0,0,0-.6585.5887l1.27,6.08A.51.51,0,0,0,29.0563,17.4945Z"
-       id="path19" />
-    <path
-       fill="none"
-       stroke="#000"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       stroke-width="2"
-       d="M37.656,12.7662a22.6773,22.6773,0,0,1,5.648,44.1971"
-       id="path21"
-       style="fill:#0000ff;stroke:#0000ff;stroke-opacity:1;fill-opacity:0;stroke-width:4.1;stroke-miterlimit:4;stroke-dasharray:none" />
-    <path
-       d="M42.9437,53.2979l-4.6293,4.14a.51.51,0,0,0,.1806.8646l5.8993,1.94a.51.51,0,0,0,.6585-.5887l-1.27-6.08A.51.51,0,0,0,42.9437,53.2979Z"
-       id="path23"
-       style="fill:#0000ff" />
+     id="line"
+     transform="matrix(0.75381127,0,0,1,11.197872,-12.934673)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.9759px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.624396"
-       x="23.488804"
-       y="41.184792"
-       id="text7322"
-       transform="scale(0.94464896,1.0585943)"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+       x="-14.834171"
+       y="42.783916"
+       id="text9395"><tspan
          sodipodi:role="line"
-         id="tspan7320"
-         x="23.488804"
-         y="41.184792"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.9759px;font-family:'Franklin Gothic Demi';-inkscape-font-specification:'Franklin Gothic Demi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.624396"><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.9759px;font-family:'Franklin Gothic Demi';-inkscape-font-specification:'Franklin Gothic Demi, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#0000fb;fill-opacity:1;stroke-width:0.624396"
-   id="tspan16030">A</tspan>P</tspan></text>
+         id="tspan9393"
+         x="-14.834171"
+         y="42.783916"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.6667px;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#3d5bc8;fill-opacity:1">AP</tspan><tspan
+         sodipodi:role="line"
+         x="-14.834171"
+         y="66.117294"
+         id="tspan9397"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.6667px;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">EXCHANGE</tspan></text>
   </g>
 </svg>
